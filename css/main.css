@@ -988,6 +988,10 @@ line-height: 40px;
 border-radius: 5px;
 }
 
+nav .btn-redondeado{
+  line-height: 20px;
+}
+
 nav i,
 nav [class^="mdi-"], nav [class*="mdi-"],
 nav i.material-icons {
@@ -1334,7 +1338,6 @@ nav .input-field label.active {
 }
 
 .btn-redondeado{
-  padding: 5px 40px;
   border-radius: 50px;
   background-color: #4FC3F7;
   color:white;
