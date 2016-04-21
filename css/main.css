@@ -1333,6 +1333,14 @@ nav .input-field label.active {
     transition: all .2s ease-in-out;
 }
 
+.btn-redondeado{
+  padding: 5px 40px;
+  border-radius: 50px;
+  background-color: #4FC3F7;
+  color:white;
+  padding: 7px 20px;
+}
+
 
 .form-section .btn-redondeado{
   background-color:#ef6c00  ;
@@ -1354,4 +1362,16 @@ nav .input-field label.active {
 .margin30-tb{
   margin-top:30px;
   margin-bottom: 30px;
+}
+
+
+.news-content img{
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+
+.news-content p{
+  overflow: hidden;
 }
