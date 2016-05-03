@@ -1378,10 +1378,3 @@ nav .input-field label.active {
 .news-content p{
   overflow: hidden;
 }
-
-svg{
-  background-color: gray;
-  width: 100%;
-  min-width: 900px;
-  height: 500px;
-}
