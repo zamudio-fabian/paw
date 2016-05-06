@@ -1,5 +1,4 @@
-var over = function(){this.attr({fill:"#4CAF50"})};
-var out = function(){this.attr({fill:"#000"})};
+
 
 // Metodos que ayudan a saber la pos x e y donde van los paises
 // var move = function(dx,dy) {
@@ -15,17 +14,8 @@ var out = function(){this.attr({fill:"#000"})};
 // 		console.log(this.getBBox());
 // 		console.log(this.getBBox().x +","+this.getBBox().y2);
 // }
-
-function shuffle(a) {
-	var j, x, i;
-    for (i = a.length; i; i -= 1) {
-        j = Math.floor(Math.random() * i);
-        x = a[i - 1];
-        a[i - 1] = a[j];
-        a[j] = x;
-    }
-	return a;
-}
+// var over = function(){this.attr({fill:"#4CAF50"})};
+// var out = function(){this.attr({fill:"#000"})};
 
 var s = Snap("#svggame");
 s.attr({ viewBox: "0 0 1100 600" });
@@ -126,20 +116,10 @@ paises.Java.addLimitrofes([paises.Australia]);
 paises.Australia.addLimitrofes([paises.Chile,paises.Java,paises.Borneo,paises.Sumatra]);
 paises.Japon.addLimitrofes([paises.Kamtchatka,paises.China]);
 
-//Ponemos todos los paises dentro de un array y los repartimos
-var shufflePaises = [];
-for (var property in paises) {
-    if (paises.hasOwnProperty(property)) {
-        shufflePaises.push(paises[property]);
-    }
-}
-shufflePaises = shuffle(shufflePaises);
-for (var i = 0; i < shufflePaises.length; i++) {
-	if(i<21){
-		shufflePaises[i].addJugador(jugador1);
-	}else{
-		shufflePaises[i].addJugador(jugador2);
-	}
-	shufflePaises[i].draw();
-
-}
+//Set Juego
+var tegGame = new Juego();
+tegGame.setJ1(jugador1);
+tegGame.setJ2(jugador2);
+tegGame.addPaises(paises);
+tegGame.repartirPaises();
+//TODO falta repartir cartas paises y objetivos secretos

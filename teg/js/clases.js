@@ -1,12 +1,57 @@
 function Juego(){
-	this.jugador1 = new Jugador("J1");
-	this.jugador2 = new Jugador("J2");
+	this.jugador1 = null;
+	this.jugador2 = null;
 	//Creamos Paises
-    this.paises = array();
+    this.paises = [];
 
-	this.prototype.init = function () {
+	this.init = function () {
 		//Repartimos Paises
 	};
+
+	this.addPaises = function(paises){
+		this.paises = paises;
+	}
+
+	this.setJ1 = function(jugador1){
+		this.jugador1 = jugador1;
+	}
+
+	this.setJ2 = function(jugador2){
+		this.jugador2 = jugador2;
+	}
+
+	function shuffle(paisesArray) {
+		var j, x, i;
+	    for (i = paisesArray.length; i; i -= 1) {
+	        j = Math.floor(Math.random() * i);
+	        x = paisesArray[i - 1];
+	        paisesArray[i - 1] = paisesArray[j];
+	        paisesArray[j] = x;
+	    }
+		return paisesArray;
+	}
+
+	this.repartirPaises = function(){
+		//Ponemos todos los paises dentro de un array y los repartimos
+		var shufflePaises = [];
+		for (var property in paises) {
+		    if (paises.hasOwnProperty(property)) {
+		        shufflePaises.push(paises[property]);
+		    }
+		}
+		shufflePaises = shuffle(shufflePaises);
+		for (var i = 0; i < shufflePaises.length; i++) {
+			if(i<22){
+				shufflePaises[i].addJugador(jugador1);
+				jugador1.addPais(shufflePaises[i]);
+			}else{
+				shufflePaises[i].addJugador(jugador2);
+				jugador2.addPais(shufflePaises[i]);
+			}
+			shufflePaises[i].draw();
+		}
+
+	}
 
 
 }
@@ -14,6 +59,11 @@ function Juego(){
 function Jugador(nombre,color){
 	this.nombre = nombre;
 	this.color = color;
+	this.paises = [];
+
+	this.addPais = function(pais){
+		this.paises.push(pais);
+	}
 }
 
 
