@@ -5,3 +5,7 @@ svg{
 	background-repeat: no-repeat;
 	background-position: 100%;
 }
+
+g{
+	cursor:pointer;
+}

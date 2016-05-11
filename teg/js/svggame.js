@@ -16,9 +16,12 @@
 // }
 // var over = function(){this.attr({fill:"#4CAF50"})};
 // var out = function(){this.attr({fill:"#000"})};
-
+var cantidadPase = 1;
+var alert = null;
 var s = Snap("#svggame");
 s.attr({ viewBox: "0 0 1100 600" });
+
+
 
 //Creamos Jugadores
 var jugador1 = new Jugador('Fabian','#689f38');
@@ -122,4 +125,63 @@ tegGame.setJ1(jugador1);
 tegGame.setJ2(jugador2);
 tegGame.addPaises(paises);
 tegGame.repartirPaises();
-//TODO falta repartir cartas paises y objetivos secretos
+//Creamos btns
+//Acción
+var btnAccion = s.group(s.rect(-20,0,235,100),s.text(50, 60, 'Acción').attr({fill: "white",'font-size':"30px"}));
+btnAccion.click($.proxy(tegGame.jugadorActual.accion,tegGame));
+//Siguiente
+var btnSiguiente = s.group(s.rect(-20,500,235,100),s.text(50, 560, 'Siguiente').attr({fill: "white",'font-size':"30px"}));
+btnSiguiente.click($.proxy(tegGame.siguiente,tegGame));
+
+//Pais1
+var removePais1 = s.rect(0,145,14,14).click(function(){tegGame.removePaisSeleccionado1();pais1.attr({text:''})});
+var pais1 = s.text(20, 160, '').attr({fill: "white",'font-size':"20px"});
+//Pais2
+var removePais2 = s.rect(0,175,14,14).click(function(){tegGame.removePaisSeleccionado2();pais2.attr({text:''})});
+var pais2 = s.text(20, 190, '').attr({fill: "white",'font-size':"20px"});
+//Addbtn
+var removeCantidad = s.text(0,220,'-').click(function(){
+	if(tegGame.paisSeleccionado1){
+		switch (tegGame.jugadorActual.estado) {
+			case 'PrimeraIncorporacion':
+			case 'SegundaIncorporacion':
+			case 'Incorporando':
+				tegGame.paisSeleccionado1.removeEjercito(1);
+				tegGame.paisSeleccionado1.draw();
+				break;
+
+		}
+	}
+});
+var addCantidad = s.text(50,220,'+').click(function(){
+	if(tegGame.paisSeleccionado1){
+		switch (tegGame.jugadorActual.estado) {
+			case 'PrimeraIncorporacion':
+			case 'SegundaIncorporacion':
+			case 'Incorporando':
+				tegGame.paisSeleccionado1.addEjercito(1);
+				tegGame.paisSeleccionado1.draw();
+				break;
+
+		}
+
+	}
+});
+
+function checkLoadSvg(){
+	window.setTimeout(function(){
+		var svgLoad = true;
+		for (var pais in tegGame.paises) {
+		    if (tegGame.paises.hasOwnProperty(pais)) {
+				if(pais.svg){
+					svgLoad = false;
+				}
+		    }
+		}
+		//Si faltan cargar esperamos otros segundo
+	    if(!svgLoad){
+			checkLoadSvg();
+		}
+	}, 1000);
+}
+checkLoadSvg();
