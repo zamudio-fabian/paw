@@ -21,8 +21,6 @@ var alert = null;
 var s = Snap("#svggame");
 s.attr({ viewBox: "0 0 1100 600" });
 
-
-
 //Creamos Jugadores
 var jugador1 = new Jugador('Fabian','#689f38');
 var jugador2 = new Jugador('Matias','#e65100');
@@ -44,7 +42,7 @@ var paises = {
  'Canada'		:new Pais('Canadá','América del Norte','teg/images/paises/canada.svg',329.225,220.195),
  'Labrador'		:new Pais('Labrador','América del Norte','teg/images/paises/labrador.svg',401.725,232.025),
  'Groenlandia'	:new Pais('Groenlandia','América del Norte','teg/images/paises/groenlandia.svg',498,210),
- 'Islandia'		:new Pais('Islandia','América del Norte','teg/images/paises/islandia.svg',596,255),
+ 'Islandia'		:new Pais('Islandia','Europa','teg/images/paises/islandia.svg',596,255),
  'Suecia'		:new Pais('Suecia','Europa','teg/images/paises/suecia.svg',715.375,191.715),
  'GranBretana'	:new Pais('Gran Bretaña','Europa','teg/images/paises/granbretana.svg',648,275),
  'Espana'		:new Pais('España','Europa','teg/images/paises/espana.svg',644,355.16),
@@ -119,12 +117,74 @@ paises.Java.addLimitrofes([paises.Australia]);
 paises.Australia.addLimitrofes([paises.Chile,paises.Java,paises.Borneo,paises.Sumatra]);
 paises.Japon.addLimitrofes([paises.Kamtchatka,paises.China]);
 
+//Agregamos tarjetas de objetivos
+var objetivos = [
+	new ObjetivoSecreto('Ocupar Africa, 5 países de América del Norte y 4 países de Europa.',function(jugador){
+		var cantEuropa = 0;
+		var cantAmericaNorte = 0;
+		var cantAfrica = 0;
+		var paises = jugador.paises;
+		for (var i = 0; i < paises.length; i++) {
+			switch (paises[i].continente) {
+				case 'Europa':
+					cantEuropa++;
+					break;
+				case 'América del Norte':
+					cantAmericaNorte++;
+					break;
+				case 'África':
+					cantAfrica++;
+					break;
+			};
+		};
+			console.log('checkWin ='+(cantEuropa == 4 && cantAfrica == 6 && cantAmericaNorte == 4)+' America='+cantAmericaNorte+' Africa='+cantAfrica+' Europa='+cantEuropa);
+			console.log(jugador.paises.length);
+			if(cantEuropa == 4 && cantAfrica == 6 && cantAmericaNorte == 4){
+				return true;
+			}else{
+				return false;
+			}
+
+	}),
+	new ObjetivoSecreto('Ocupar América del Norte, 2 países de Oceanía y 4 de Asia',function(jugador){
+		var cantOceania = 0;
+		var cantAmericaNorte = 0;
+		var cantAsia = 0;
+		var paises = jugador.paises;
+		for (var i = 0; i < paises.length; i++) {
+			switch (paises[i].continente) {
+				case 'Oceanía':
+					cantOceania++;
+					break;
+				case 'América del Norte':
+					cantAmericaNorte++;
+					break;
+				case 'Asia':
+					cantAsia++;
+					break;
+			};
+		};
+			console.log('checkWin ='+(cantAmericaNorte == 9 && cantOceania == 2 && cantAsia == 4)+' America='+cantAmericaNorte+' Oceania='+cantOceania+' Asia='+cantAsia);
+			console.log(jugador.paises.length);
+			if(cantAmericaNorte == 9 && cantOceania == 2 && cantAsia == 4){
+				return true;
+			}else{
+				return false;
+			}
+
+	})
+]
+
+
 //Set Juego
 var tegGame = new Juego();
 tegGame.setJ1(jugador1);
 tegGame.setJ2(jugador2);
 tegGame.addPaises(paises);
+tegGame.addObjetivos(objetivos);
 tegGame.repartirPaises();
+tegGame.repartirObjetivos();
+
 //Creamos btns
 //Acción
 var btnAccion = s.group(s.rect(-20,0,235,100),s.text(50, 60, 'Acción').attr({fill: "white",'font-size':"30px"}));
@@ -149,6 +209,14 @@ var removeCantidad = s.text(0,220,'-').click(function(){
 				tegGame.paisSeleccionado1.removeEjercito(1);
 				tegGame.paisSeleccionado1.draw();
 				break;
+			case 'Reagrupando':
+					if(tegGame.paisSeleccionado1 &&
+						tegGame.paisSeleccionado2 &&
+						tegGame.cantidadReagrupar>0){
+						tegGame.paisSeleccionado1.enviarEjercito(tegGame.paisSeleccionado2,tegGame.paisSeleccionado1,1);
+						tegGame.cantidadReagrupar--;
+					}
+				break;
 
 		}
 	}
@@ -162,6 +230,14 @@ var addCantidad = s.text(50,220,'+').click(function(){
 				tegGame.paisSeleccionado1.addEjercito(1);
 				tegGame.paisSeleccionado1.draw();
 				break;
+			case 'Reagrupando':
+				if(tegGame.paisSeleccionado1 &&
+					tegGame.paisSeleccionado2 &&
+					tegGame.paisSeleccionado1.ejercito>1){
+					tegGame.paisSeleccionado1.enviarEjercito(tegGame.paisSeleccionado1,tegGame.paisSeleccionado2,1);
+					tegGame.cantidadReagrupar++;
+				}
+			break;
 
 		}
 
@@ -185,3 +261,16 @@ function checkLoadSvg(){
 	}, 1000);
 }
 checkLoadSvg();
+
+
+function showWinAlert(){
+	var btnAceptar = s.group(s.rect(460,400,180,50).attr({fill:'white'}),
+						s.text(500, 435, 'Aceptar').attr({'font-size':"30px"}));
+	alert = s.group(s.rect(0,0,1100,600).attr({'fill-opacity':'0.5'}),
+				s.rect(200,100,700,400),
+				s.text(350,150,'Felicitaciones '+tegGame.jugadorActual.nombre+'!!').attr({fill:'white','font-size':"40px"}),
+				s.text(500,200,'Has ganado').attr({fill:'white','font-size':"20px"}),
+				btnAceptar);
+
+
+}

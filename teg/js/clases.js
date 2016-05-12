@@ -6,6 +6,8 @@ function Juego(){
 	this.paisSeleccionado2 = '';
 	this.cantidad = 0;
 	this.conquistado = false;
+	this.objetivos = [];
+
 
 	//Creamos Paises
     this.paises = [];
@@ -16,6 +18,17 @@ function Juego(){
 
 	this.addPaises = function(paises){
 		this.paises = paises;
+	}
+
+	this.addObjetivos = function(objetivos){
+		this.objetivos = objetivos;
+	}
+
+	this.repartirObjetivos = function(){
+		var objetivosShuffle = shuffle(this.objetivos);
+		this.jugador1.addObjetivo(objetivosShuffle[0]);
+		console.log(objetivosShuffle[0]);
+		this.jugador2.addObjetivo(objetivosShuffle[1]);
 	}
 
 	this.setJ1 = function(jugador1){
@@ -92,6 +105,10 @@ function Juego(){
 	}
 
 	this.siguiente = function(){
+		if(this.jugadorActual.objetivo.checkWin(this.jugadorActual)){
+			console.log(this.jugadorActual.nombre + ' GANO!!');
+			showWinAlert();
+		}
 		switch (this.jugadorActual.estado) {
 			case 'PrimeraIncorporacion':
 				this.jugadorActual.estado = 'SegundaIncorporacion';
@@ -121,11 +138,19 @@ function Juego(){
 				this.clearPaisesSeleccionados();
 				break;
 			case 'Reagrupando':
+				//Cambio el jugador Actual
 				if(this.jugadorActual == this.jugador1){
 					this.jugadorActual = this.jugador2;
 				}else{
 					this.jugadorActual = this.jugador1;
 				}
+				//Agregamos ejercitos MIN 3
+				var ejercitosNuevos = 3;
+				if(this.jugadorActual.paises.length>=8){
+					ejercitosNuevos = Math.floor(this.jugadorActual.paises.length/2);
+				}
+				this.jugadorActual.addEjercitosDisponibles(ejercitosNuevos);
+
 				this.jugadorActual.estado = 'Incorporando';
 				this.conquistado = false;
 				break;
@@ -141,7 +166,11 @@ function Jugador(nombre,color){
 	this.paises = [];
 	this.ejercitosDisponibles = 5;
 	this.estado = 'PrimeraIncorporacion';
+	this.objetivo = null;
 
+	this.addObjetivo = function(objetivo){
+		this.objetivo = objetivo;
+	}
 
 	this.addPais = function(pais){
 		this.paises.push(pais);
@@ -208,8 +237,7 @@ function Jugador(nombre,color){
 							}
 						}
 
-						//Seteamos variable usada en la etapa de tarjetas
-						this.conquistado = conquistado;
+
 						//Los ejercitos eliminados vuelven al stack de ejercitos
 						this.paisSeleccionado1.jugador.addEjercitosDisponibles(ejercitoAtacanteEliminado);
 						this.paisSeleccionado1.removeEjercito(ejercitoAtacanteEliminado);
@@ -219,7 +247,16 @@ function Jugador(nombre,color){
 						this.paisSeleccionado2.removeEjercito(ejercitoDefensorEliminado);
 
 						if(conquistado){
+							//Seteamos variable usada en la etapa de tarjetas
+							this.conquistado = conquistado;
+							//Eliminamos el pais del array del j2
+							var indexPaisJ2 = this.paisSeleccionado2.jugador.paises.indexOf(this.paisSeleccionado2);
+							this.paisSeleccionado2.jugador.paises.splice(indexPaisJ2,1);
+							console.log('Paises j2 = '+this.paisSeleccionado2.jugador.paises.length);
+							//Asignamos el pais al array del j1
 							this.paisSeleccionado2.jugador = this.paisSeleccionado1.jugador;
+							this.paisSeleccionado1.jugador.paises.push(this.paisSeleccionado2);
+							console.log('Paises j1 = '+this.paisSeleccionado1.jugador.paises.length);
 							//Creamos una alerta para felicitarlo y ver si quiere pasar ejercitos
 							btnAumentar = s.group(s.rect(580,300,20,20).attr({fill:'white'}),
 												s.text(580, 320, '+').attr({'font-size':"30px"}))
@@ -242,6 +279,10 @@ function Jugador(nombre,color){
 										btnAumentar,
 										btnDisminuir,
 										btnAceptar);
+							if(this.jugadorActual.objetivo.checkWin(this.jugadorActual)){
+											console.log(this.jugadorActual.nombre + ' GANO!!');
+											showWinAlert();
+							}
 
 						}else{
 							this.paisSeleccionado1.draw();
@@ -251,7 +292,7 @@ function Jugador(nombre,color){
 					}
 					break;
 				case 'Reagrupamos':
-					console.log('pasamos ejercitos de un pais a otro');
+
 					break;
 				default:
 
@@ -292,6 +333,7 @@ function Pais(nombre,continente,urlImg,posx,posy){
 	this.limitrofes = [];
 	this.jugador = null;
 	this.svg = null;
+	this.ejercitosPasados = 0;
 
 	this.draw = function(){
 		Snap.load(this.urlImg,function(f){
@@ -361,7 +403,20 @@ function Pais(nombre,continente,urlImg,posx,posy){
 							pais2.attr({text:this.nombre});
 						}
 					break;
-
+				case 'Reagrupando':
+						//Si no tengo pais seleccionado en 1 y es del jugador actual lo seteo
+						if(!tegGame.paisSeleccionado1 && tegGame.jugadorActual == this.jugador){
+							tegGame.setPaisSeleccionado1(this);
+							pais1.attr({text:this.nombre});
+							pais2.attr({text:''});
+							tegGame.paisSeleccionado2 = '';
+							tegGame.cantidadReagrupar = 0;
+						}else if(tegGame.paisSeleccionado1.isLimitrofeAliado(this)){
+							tegGame.setPaisSeleccionado2(this);
+							pais2.attr({text:this.nombre});
+							tegGame.cantidadReagrupar = 0;
+						}
+					break;
 			}
 
 	}
@@ -371,13 +426,21 @@ function Pais(nombre,continente,urlImg,posx,posy){
 		var paisHacia = tegGame.paisSeleccionado2;
 		var cantidad = cantidadPase;
 		if(cantidad<=3 && cantidad>=1 && cantidad<=(tegGame.paisSeleccionado1.ejercito-1)){
-			paisHacia.addEjercito(cantidad);
-			paisDesde.removeEjercito(cantidad);
-			paisHacia.draw();
-			paisDesde.draw();
+			paisDesde.enviarEjercito(paisDesde,paisHacia,cantidad);
 		}
 		cantidadPase = 1;
+		tegGame.removePaisSeleccionado2();
+		pais2.attr({text:''});
 		alert.remove();
+	}
+
+	this.enviarEjercito = function(paisDesde,paisHacia,cantidad){
+		paisHacia.ejercito+=cantidad;
+		paisDesde.ejercito-=cantidad;
+		console.log(paisDesde.ejercito);
+		console.log(paisHacia.ejercito);
+		paisHacia.draw();
+		paisDesde.draw();
 	}
 
 	this.addJugador = function(jugador){
@@ -415,7 +478,18 @@ function Pais(nombre,continente,urlImg,posx,posy){
 
 }
 
-function ObjetivoSecreto(){
+function ObjetivoSecreto(descripcion,funcion){
+	this.descripcion = descripcion;
+
+	this.checkWin = function(jugador){
+		if(funcion(jugador)){
+			return true;
+		}else if(jugador.paises.length==43){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
 
 function TarjetaPais(){
