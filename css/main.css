@@ -18,6 +18,10 @@ footer.page-footer {
   color:white;
 }
 
+#svggame{
+	margin:0px;
+}
+
 
 
 
@@ -1377,4 +1381,49 @@ nav .input-field label.active {
 
 .news-content p{
   overflow: hidden;
+}
+
+.modal-wrapper{
+	z-index: 9002 ;
+    display: none;
+	position: fixed;
+    top: -100px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 125%;
+    width: 100%;
+    background: #000;
+	opacity: 0.5;
+    will-change: opacity;
+}
+
+
+
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  background-color: #fafafa;
+  padding: 0;
+  max-height: 70%;
+  width: 35%;
+  margin: auto;
+  overflow-y: auto;
+  border-radius: 2px;
+  will-change: top, opacity;
+  z-index: 9003;
+    opacity: 1;
+    transform: scaleX(1);
+    top: 10%;
+
+}
+
+.modal h4{
+	color:#47afdc;
+}
+
+.modal .modal-content {
+  padding: 24px;
 }

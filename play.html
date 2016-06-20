@@ -35,8 +35,48 @@
       </ul>
     </div>
   </nav>
-  <section class="row container center-align">
-    <svg class="z-depth-3 margin30-tb col m12 s12" id="svggame"></svg>
+
+  <section class="row container center-align" id="myForm">
+		  <form>
+      		<div class="input-field col s6 offset-s3">
+      		  <input id="nombre" type="text" class="validate">
+      		  <label for="nombre">Nombre</label>
+      		</div>
+      		<div class="input-field col s12 center">
+      		  <button class="btn center waves-effect waves-light btn" id="iniciar" >Iniciar</button>
+      		</div>
+      	  </form>
+	</section>
+	<div class="modal-wrapper" id="modalWrapper"></div>
+	<div id="modal" class="modal">
+	  <div class="modal-content center-align">
+		<h4>Felicitaciones!!</h4>
+		<h6>Has conquistado un nuevo país!!</h6>
+		<p>¿Cuántos ejercitos desea agregar?</p>
+		<div class="row" >
+			<div class="input-field col s12">
+				<select class="browser-default" id="EjercitoAtackAdd">
+			      </select>
+            </div>
+			<div class="input-field col s12 center">
+              <button class="btn center waves-effect waves-light btn" onclick="addEjercitoAfterAtack()">Agregar</button>
+            </div>
+		</div>
+	  </div>
+	</div>
+	<div id="modalMessage" class="modal">
+	  <div class="modal-content center-align">
+		  <h6></h6>
+		  <div class="input-field col s12 center">
+			<button class="btn center waves-effect waves-light btn" onclick="closeMessage()">Aceptar</button>
+		  </div>
+	  </div>
+	</div>
+
+	<section class="row container center-align svgwrapper" >
+	  	<article id="svgwrapper"></article>
+	</section>
+
   </section>
   <footer class="page-footer right-align">
     <div class="container">
@@ -49,7 +89,12 @@
   <script src="js/elementos.js" charset="utf-8"></script>
   <script src="js/main.js" charset="utf-8"></script>
   <script src="js/Snap.svg-0.4.1/dist/snap.svg-min.js" charset="utf-8"></script>
-  <script src="teg/js/clases.js" charset="utf-8"></script>
-  <script src="teg/js/svggame.js" charset="utf-8"></script>
+  <script src="js/socket.io-1.4.5.js" charset="utf-8"></script>
+  <script src="teg/client/svggame.js" charset="utf-8"></script>
+  <script src="teg/client/pais.js" charset="utf-8"></script>
+  <script src="teg/client/objetivo.js" charset="utf-8"></script>
+  <script src="teg/client/dado.js" charset="utf-8"></script>
+  <script src="teg/client/juego.js" charset="utf-8"></script>
+  <script src="teg/client/jugador.js" charset="utf-8"></script>
 </body>
 </html>
