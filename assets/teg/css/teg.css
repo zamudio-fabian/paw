@@ -1,0 +1,176 @@
+.svgwrapper{
+	position: relative;
+	color: lightgray;
+	margin:50px auto;
+}
+svg{
+  	background-color: gray;
+	background-image: url("../images/background-teg.jpg");
+	background-size: 80% 100%;
+	background-repeat: no-repeat;
+	background-position: 100%;
+}
+
+g{
+	cursor:pointer;
+}
+
+.pointer{
+	cursor:pointer;
+}
+
+#wrapperj1{
+	position: absolute;
+	top: 1%;
+	width: 20%;
+	font-size: 1.5vw;
+}
+
+#wrapperj2{
+	position: absolute;
+	top: 10%;
+	width: 20%;
+	font-size: 1.5vw;
+}
+
+.activePlayer{
+	color:white ;
+}
+
+#wrapperj1 > .nombreteg{
+	border-left: 5px solid #e65100;
+}
+
+#wrapperj2 > .nombreteg{
+	border-left: 5px solid #689f38;
+}
+
+
+
+.nombreteg{
+	width: 50%;
+	float: left;
+	padding-left: 5px;
+	font-size: 1.5vw;
+	text-align: left;
+}
+
+.nombreteg > small{
+	font-size: 1vw;
+}
+
+.ejercitosteg{
+	float: left;
+	width: 25%;
+	line-height: 30px;
+}
+
+.paisesteg{
+	float: left;
+	width: 25%;
+	line-height: 30px;
+}
+
+#consola{
+	position: absolute;
+    left: 0;
+    top: 30%;
+    width: 20%;
+    height: 40%;
+    color: white;
+    padding: 5px;
+    font-size: 1em;
+    font-family: monospace;
+	border: 0px;
+	border-top:1px solid lightgray;
+    overflow-y: auto;
+	overflow-x: hidden;
+}
+
+#wrapperp1{
+	position: absolute;
+    background: #B58D44;
+    padding: 10px 30px;
+    width: 20%;
+    color: white;
+    left: 35%;
+    top: 0;
+	z-index: 9000;
+	height: 7%;
+}
+#wrapperp1 > i{
+	color:red;
+	position: absolute;
+    right: 5%;
+}
+
+#wrapperp2 > i{
+	color:red;
+	position: absolute;
+    right: 5%;
+}
+
+#wrapperp2{
+	position: absolute;
+    background: #B58D44;
+    padding: 10px 30px;
+    width: 20%;
+	height: 7%;
+    color: white;
+    left: 65%;
+    top: 0;
+	z-index: 9000;
+}
+
+#btnRestar{
+	position: absolute;
+    background: rgb(204, 163, 47);
+    width: 5%;
+	height: 7%;
+    color: white;
+    left: 31%;
+	text-align: center;
+    top: 0;
+	border-radius: 200px 0px 0px 200px;
+	-moz-border-radius: 200px 0px 0px 200px;
+	-webkit-border-radius: 200px 0px 0px 200px;
+	border: 0px solid #000000;
+}
+
+#btnAumentar{
+	position: absolute;
+    background: rgb(204, 163, 47);
+    width: 5%;
+	height: 7%;
+    color: white;
+    left: 54%;
+    top: 0;
+	text-align: center;
+	border-radius: 0px 200px 200px 0px;
+	-moz-border-radius: 0px 200px 200px 0px;
+	-webkit-border-radius: 0px 200px 200px 0px;
+	border: 0px solid #000000;
+}
+
+#btnNext{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	font-size: 1.5vw;
+	width: 20.1%;
+	height: 16%;
+	color: white;
+	background-color: brown;
+	border: none;
+}
+
+#btnAtacar{
+	position: absolute;
+    top: 0;
+    left: 58%;
+    height: 7%;
+    width: 5%;
+    background-color: brown;
+    border: none;
+    color: white;
+}
