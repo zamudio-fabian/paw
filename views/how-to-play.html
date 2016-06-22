@@ -1,89 +1,144 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>TEG Ultima Batalla</title>
-  <link rel="stylesheet" href="css/font-awesome-4.6.1/css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/default.css">
-  <link rel="stylesheet" href="css/main.css">
+	<meta charset="utf-8">
+	<title>TEG Ultima Batalla</title>
+	<link rel="stylesheet" href="css/font-awesome-4.6.1/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/default.css">
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#!" class="brand-logo"></a>
-      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="fa fa-bars" aria-hidden="true"></i></a>
-      <ul class="right hide-on-med-and-down">
-         <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
-        <li><a href="home">Home</a></li>
-        <li><a href="how-to-play">Como jugar</a></li>
-        <li><a href="rank">Ranking</a></li>
-        <li><a href="news">Noticias</a></li>
-        <li><a href="support">Soporte</a></li>
+	<nav>
+		<div class="nav-wrapper">
+			<a href="#!" class="brand-logo"></a>
+			<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="fa fa-bars" aria-hidden="true"></i></a>
+			<ul class="right hide-on-med-and-down">
+				<li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
+				<li><a href="home">Home</a></li>
+				<li><a href="how-to-play">Como jugar</a></li>
+				<li><a href="rank">Ranking</a></li>
+				<li><a href="news">Noticias</a></li>
+				<li><a href="support">Soporte</a></li>
 
-		{{#if username}}
-			<li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
-			<li><a href="logout">Salir</a></li>
-		{{else}}
-        	<li><a href="login" class="btn btn-login">Ingresar</a></li>
-		{{/if}}
-      </ul>
-      <ul class="side-nav" id="mobile-demo">
-         <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
-        <li><a href="home">Home</a></li>
-        <li><a href="how-to-play">Como jugar</a></li>
-        <li><a href="rank">Ranking</a></li>
-        <li><a href="news">Noticias</a></li>
-        <li><a href="support">Soporte</a></li>
+				{{#if username}}
+				<li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
+				<li><a href="logout">Salir</a></li>
+				{{else}}
+				<li><a href="login" class="btn btn-login">Ingresar</a></li>
+				{{/if}}
+			</ul>
+			<ul class="side-nav" id="mobile-demo">
+				<li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
+				<li><a href="home">Home</a></li>
+				<li><a href="how-to-play">Como jugar</a></li>
+				<li><a href="rank">Ranking</a></li>
+				<li><a href="news">Noticias</a></li>
+				<li><a href="support">Soporte</a></li>
 
-		{{#if username}}
-			<li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
-			<li><a href="logout">Salir</a></li>
-		{{else}}
-        	<li><a href="login" class="btn btn-login">Ingresar</a></li>
-		{{/if}}
-      </ul>
-    </div>
-  </nav>
+				{{#if username}}
+				<li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
+				<li><a href="logout">Salir</a></li>
+				{{else}}
+				<li><a href="login" class="btn btn-login">Ingresar</a></li>
+				{{/if}}
+			</ul>
+		</div>
+	</nav>
 
-  <section class="row container margin30-tb">
-    <div class="col m12 right-align">
-      <a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar ahora</a>
-    </div>
-    <header>
-      <h1>Reglas</h1>
-    </header>
-    <article class="col m12 faq">
-      <header>
-        <h2>Lorem ipsum</h2>
-      </header>
-      <p>  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at eros tortor. Quisque porttitor nibh in turpis volutpat venenatis. Suspendisse sagittis elit eget molestie sagittis. Duis vulputate id massa eu posuere. Quisque pharetra bibendum velit, nec pretium ex vestibulum eu. Aliquam nec nunc in tortor commodo gravida. Donec porta sed nulla in accumsan. Vivamus vehicula ipsum est, nec elementum metus auctor sit amet. Duis condimentum vehicula sem eu accumsan. Vivamus euismod ultrices eros, sed facilisis diam fringilla quis. Etiam tempor massa a lacus ultrices rutrum eget in elit. Fusce sem enim, vulputate eu felis vel, hendrerit ultricies eros. Curabitur rutrum tristique mi, sed scelerisque est sodales eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-      </p>
-    </article>
-    <article class="col m12 faq">
-      <header>
-        <h2>Lorem ipsum</h2>
-      </header>
-      <p>  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at eros tortor. Quisque porttitor nibh in turpis volutpat venenatis. Suspendisse sagittis elit eget molestie sagittis. Duis vulputate id massa eu posuere. Quisque pharetra bibendum velit, nec pretium ex vestibulum eu. Aliquam nec nunc in tortor commodo gravida. Donec porta sed nulla in accumsan. Vivamus vehicula ipsum est, nec elementum metus auctor sit amet. Duis condimentum vehicula sem eu accumsan. Vivamus euismod ultrices eros, sed facilisis diam fringilla quis. Etiam tempor massa a lacus ultrices rutrum eget in elit. Fusce sem enim, vulputate eu felis vel, hendrerit ultricies eros. Curabitur rutrum tristique mi, sed scelerisque est sodales eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-
-      </p>
-    </article>
-    <article class="col m12 faq">
-      <header>
-        <h2>Lorem ipsum</h2>
-      </header>
-      <p>  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at eros tortor. Quisque porttitor nibh in turpis volutpat venenatis. Suspendisse sagittis elit eget molestie sagittis. Duis vulputate id massa eu posuere. Quisque pharetra bibendum velit, nec pretium ex vestibulum eu. Aliquam nec nunc in tortor commodo gravida. Donec porta sed nulla in accumsan. Vivamus vehicula ipsum est, nec elementum metus auctor sit amet. Duis condimentum vehicula sem eu accumsan. Vivamus euismod ultrices eros, sed facilisis diam fringilla quis. Etiam tempor massa a lacus ultrices rutrum eget in elit. Fusce sem enim, vulputate eu felis vel, hendrerit ultricies eros. Curabitur rutrum tristique mi, sed scelerisque est sodales eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-      </p>
-    </article>
-  </section>
-  <footer class="page-footer right-align">
-    <div class="container">
-      Fabian Zamudio
-    </div>
-  </footer>
+	<section class="row container margin30-tb">
+		<div class="col m12 right-align">
+			<a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar ahora</a>
+		</div>
+		<header>
+			<h1>Reglas</h1>
+		</header>
+		<article class="col m12 faq">
+			<h5>1. IDEA GENERAL</h5>
+			<p>El juego propone un conflicto bélico que tiene lugar sobre un planisferio dividido en 43 países.
+				Para empezar se reparten los 43 países entre los jugadores, quienes ocupan sus dominios
+				con fichas (ejércitos). Cada jugador tiene un OBJETIVO SECRETO a cumplir, que se le asigna
+				por azar y que los jugadores desconocen. Para cumplir con su objetivo (ocupar cierta cantidad
+				de países o destruir a otros bandos) el jugador deberá ampliar sus dominios y reordenar sus
+				fuerzas, lo que exigirá emprender ataques y defenderse de ataques adversarios; agrupar y
+				desplazar ejércitos; concertar pactos con otros contendientes. La conquista de nuevos territorios
+				le permitirá aumentar el número de ejércitos a su disposición, otorgándole mayores
+				chances para triunfar en los combates. La mecánica de los combates se basa en el tiro de los
+				dados, pero toma en cuenta la cantidad de ejércitos que lo defienden.
+				Así, cuando 3 ejércitos atacan a un país defendido por un solo ejército, el atacante lanza 3
+				dados y el defensor 1. Con que solo uno de los dados del atacante supere al dado del defensor,
+				el ataque es exitoso. Este mecanismo indica que no es sólo el azar lo que decide las
+				batallas, sino también, y fundamentalmente, la inteligencia táctica y estratégica del jugador
+				para disponer sus fuerzas.</p>
 
 
-  <script src="js/jquery-2.2.3.min.js" charset="utf-8"></script>
-  <script src="js/elementos.js" charset="utf-8"></script>
-  <script src="js/main.js" charset="utf-8"></script>
-</body>
-</html>
+				<h5>3. REPARTO DE PAÍSES Y OBJETIVOS</h5>
+				<p>
+					<ul>
+						<li>Cada participante elige un color de ficha, que usará durante todo el partido.</li>
+						<li>Se mezclan las 43 TARJETAS DE PAISES, y se reparten entre los jugadores.</li>
+						<li>Ahora cada participante coloca un ejército de su color en cada uno de los países que obtuvo
+							en el reparto de las tarjetas de países.
+							Los 43 países del mapa quedan así ocupados, cada uno por un ejército</li>
+							<li> Se mezclan las 6 TARJETAS DE OBJETIVOS SECRETOS y se colocan boca abajo. Cada
+								jugador toma una de estas tarjetas, al azar, y se la guarda sin mostrarla a los demás. Las
+								tarjetas de objetivos secretos sobrantes se retiran del juego y no se vuelven a usar durante
+								el resto del partido.</li>
+							</ul>
+						</p>
+						<h5>4. DOS VUELTAS PARA AGREGAR 8 EJÉRCITOS</h5>
+						<ul>
+							<li>El jugador incorpora al mapa 5 ejércitos de su color, ubicándolos en uno o varios de sus
+								países. Siguiendo la rueda, cada jugador hace lo mismo.</li>
+								<li>El primer jugador inicia una segunda vuelta incorporando otros 3 ejércitos al mapa; por
+									turno los demás jugadores hacen lo mismo</li>
+								</ul>
+								<h5>5. INICIACIÓN DE LAS HOSTILIDADES</h5>
+								<p>Nuevamente es el turno del primer jugador. Él puede:</p>
+								<ul>
+									<li>ATACAR países ajenos</li>
+									<li>REAGRUPAR sus fuerzas</li>
+								</ul>
+								<p>Con esto finaliza su turno, continuando de igual manera el jugador que está a su izquierda. El jugador
+									tiene la opción de cumplir o no cualquiera de estos tres pasos, pero no puede alterar su orden. Vale
+									decir que si empieza a reagrupar fuerzas ya no podrá, en ese turno, efectuar nuevos ataques.</p>
+	<h6>ATACAR PAÍSES AJENOS</h6>
+	<ul>
+		<li>Ejércitos de ataque: El número de ejércitos de ataque de que dispone un país es el número
+		total de ejércitos que hay en el país en el momento, menos uno. Si en un país hay un solo
+		ejército, este país no puede atacar a otro ( ese ejército es considerado de ocupación).</li>
+		<li>Ejército de defensa: para la defensa de un país cuentan todos los ejércitos que hay en el país.</li>
+		<li>Dos países son limítrofes si tiene una frontera en común, o si están unidos por puentes
+		sobre el agua (como Chile - Australia)</li>
+		<li>Un país puede atacar a otro ( perteneciente a otro color) sí: el país atacante dispone de
+		ejércitos de ataque, y el país atacado es limítrofe al país atacante.</li>
+		<li>Concluido un ataque, pueden suceder dos cosas:
+			<p>Si no queda ningún ejército : este país ha sido conquistado por "Atacante",
+			quien debe pasar un ejército. Si lo desea, puede pasar a España uno o
+			dos ejércitos más, como máximo.</p>
+			<p>Si queda al menos un ejército: este país sigue siendo de "Defensor".</p>
+		</li>
+	</ul>
+	<h5>5. CONTINUACIÓN DEL JUEGO</h5>
+	<p>
+		Una vez concluida la primera vuelta de hostilidades, se agrega un nuevo elemento al turno de
+		los jugadores: la incorporación de ejércitos. De aquí en adelante, el orden del turno será:
+		<p>* INCORPORAR EJÉRCITOS</p>
+		<p>* ATACAR</p>
+		<p>* REAGRUPAR</p>
+	</p>
+
+								</article>
+
+							</section>
+							<footer class="page-footer right-align">
+								<div class="container">
+									Fabian Zamudio
+								</div>
+							</footer>
+
+
+							<script src="js/jquery-2.2.3.min.js" charset="utf-8"></script>
+							<script src="js/elementos.js" charset="utf-8"></script>
+							<script src="js/main.js" charset="utf-8"></script>
+						</body>
+						</html>

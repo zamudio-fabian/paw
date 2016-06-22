@@ -45,18 +45,17 @@
       </ul>
     </div>
   </nav>
-
-  <section class="row container center-align" id="myForm">
-		  <form>
-      		<div class="input-field col s6 offset-s3">
-      		  <input id="nombre" type="text" class="validate">
-      		  <label for="nombre">Nombre</label>
-      		</div>
-      		<div class="input-field col s12 center">
-      		  <button class="btn center waves-effect waves-light btn" id="iniciar" >Iniciar</button>
-      		</div>
-      	  </form>
-	</section>
+	{{#if username}}
+	<section class="row container center-align" id="myForm">
+  		  <form>
+        		<div class="input-field col s6 offset-s3">
+        		  <input id="nombre" type="hidden" value="{{username}}" class="validate">
+        		</div>
+        		<div class="input-field col s12 center">
+        		  <button class="btn center waves-effect waves-light btn" id="iniciar" >Iniciar</button>
+        		</div>
+        	</form>
+  	</section>
 	<div class="modal-wrapper" id="modalWrapper"></div>
 	<div id="modal" class="modal">
 	  <div class="modal-content center-align">
@@ -82,10 +81,19 @@
 		  </div>
 	  </div>
 	</div>
+		<section class="row container center-align svgwrapper" >
+			<article id="svgwrapper">
+				<div id="modalLoading">
+					<h4>Loading...</h4>
+					<ul>
+						<li>Esperando a los demás participantes</li>
+						<li>Creando juego SVG</li>
+					</ul>
+				</div>
+			</article>
+		</section>
+	{{/if}}
 
-	<section class="row container center-align svgwrapper" >
-	  	<article id="svgwrapper"></article>
-	</section>
 
   </section>
   <footer class="page-footer right-align">

@@ -1436,3 +1436,15 @@ nav .input-field label.active {
 .modal .modal-content {
   padding: 24px;
 }
+
+#modalLoading{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 9999;
+	background: white;
+	display: none;
+	padding: 20%;
+    color: gray;
+    font-size: 1vw;
+}

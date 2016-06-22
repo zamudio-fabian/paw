@@ -141,6 +141,9 @@ function JuegoClient(svg){
 		}
 		that.refreshPlayers();
 		showMessage();
+		$('#btnAumentar').addClass('btnActive');
+		$('#btnRestar').addClass('btnActive');
+		$("#modalLoading").remove();
 
 	});
 
@@ -206,7 +209,7 @@ function JuegoClient(svg){
 				$('#modalMessage').css('display','block');
 			}
 		}
-		that.refreshAfterAtaque();
+		that.refreshAfterAtaque(response.ejercitos.dadosAtacante,response.ejercitos.dadosDefensores);
 
 
 	});
@@ -222,7 +225,6 @@ function JuegoClient(svg){
 	});
 
 	this.socket.on('nextResponse',function(response){
-
 		for (var i = 0; i < that.jugadores.length; i++) {
 			if(that.jugadores[i].id == response.actualId){
 				that.jugadorActual = that.jugadores[i];
@@ -243,6 +245,7 @@ function JuegoClient(svg){
 		$('#modalMessage h6').html(jugador.nombre+' GANO!!!');
 		$('#modalWrapper').css('display','block');
 		$('#modalMessage').css('display','block');
+		this.socket.disconnect();
 	});
 
 
@@ -348,7 +351,18 @@ function JuegoClient(svg){
 		alert('ganaste');
 	}
 
-	this.refreshAfterAtaque = function(){
+	this.refreshAfterAtaque = function(dadosAtacante,dadosDefensor){
+		var txt = $('#consola');
+		var txtAtacante = '';
+		var txtDefensor = '';
+		for (var i = 0; i < dadosAtacante.length; i++) {
+			txtAtacante += ' '+dadosAtacante[i];
+		}
+		for (var i = 0; i < dadosDefensor.length; i++) {
+			txtDefensor += ' '+dadosDefensor[i];
+		}
+		txt.text(txt.val()+"/nAtacante = "+txtAtacante);
+		txt.text(txt.val()+"/nDefensor = "+txtDefensor);
 		var j1 = that.getJ(1);
 		var j2 = that.getJ(2);
 		$("#ejercitosJ1").text('E '+j1.ejercitosDisponibles);
@@ -359,9 +373,39 @@ function JuegoClient(svg){
 		that.paisSeleccionado2.draw(that.svg);
 	}
 
+
 	this.refreshPlayers = function(){
 		var j1 = that.getJ(1);
 		var j2 = that.getJ(2);
+		if(that.getJ(1).id == that.jugadorActual.id){
+			$("#wrapperj1").addClass('activePlayer');
+			$("#wrapperj2").removeClass('activePlayer');
+		}else{
+			$("#wrapperj2").addClass('activePlayer');
+			$("#wrapperj1").removeClass('activePlayer');
+		}
+		switch (that.jugadorActual.estado) {
+			case 'PrimeraIncorporacion':
+			case 'SegundaIncorporacion':
+			case 'Incorporando':
+				$('#btnLeft').removeClass('active');
+				$('#btnAumentar').find($(".fa")).removeClass('fa-arrow-circle-right').addClass('fa-plus');
+				$('#btnAumentar').addClass('active');
+				$('#btnRestar').addClass('active');
+				break;
+			case 'Atacando':
+				$('#btnAumentar').removeClass('active');
+				$('#btnRestar').removeClass('active');
+				$('#btnAtacar').addClass('active');
+
+				break;
+			case 'Reagrupando':
+				$('#btnAumentar').find($(".fa")).addClass('fa-arrow-circle-right').removeClass('fa-plus');
+				$('#btnAtacar').removeClass('active');
+				$('#btnLeft').addClass('active');
+				$('#btnAumentar').addClass('active');
+				break;
+		}
 		$("#nombreJ1").text(j1.nombre);
 		$("#nombreJ2").text(j2.nombre);
 		$("#ejercitosJ1").text('E '+j1.ejercitosDisponibles);

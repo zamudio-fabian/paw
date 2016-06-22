@@ -56,100 +56,18 @@
         <tr>
           <th>Nombre</th>
           <th>Puntos</th>
-          <th>Rango</th>
           <th>Batallas</th>
         </tr>
-        <tr>
-          <td>Fabian</td>
-          <td>520</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>21</td>
 
-        </tr>
-        <tr>
-          <td>Matias</td>
-          <td>515</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>21</td>
-        </tr>
-        <tr>
-          <td>Patricio</td>
-          <td>475</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>20</td>
-        </tr>
-        <tr>
-          <td>Rafa</td>
-          <td>320</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>15</td>
-        </tr>
-        <tr>
-          <td>Ezequiel</td>
-          <td>305</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>12</td>
-        </tr>
-        <tr>
-          <td>Fabian</td>
-          <td>520</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>11</td>
-        </tr>
-        <tr>
-          <td>Matias</td>
-          <td>515</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>10</td>
-        </tr>
-        <tr>
-          <td>Patricio</td>
-          <td>475</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>9</td>
-        </tr>
-        <tr>
-          <td>Rafa</td>
-          <td>320</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>9</td>
-        </tr>
-        <tr>
-          <td>Ezequiel</td>
-          <td>305</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>9</td>
-        </tr>
-        <tr>
-          <td>Fabian</td>
-          <td>520</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>7</td>
-        </tr>
-        <tr>
-          <td>Matias</td>
-          <td>515</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>4</td>
-        </tr>
-        <tr>
-          <td>Patricio</td>
-          <td>475</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>3</td>
-        </tr>
-        <tr>
-          <td>Rafa</td>
-          <td>320</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>Ezequiel</td>
-          <td>305</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-          <td>1</td>
-        </tr>
+			{{#each all}}
+			<tr>
+				<td>{{this.username}}</td>
+				<td>{{this.totalpuntos}}</td>
+				<td>{{this.cantidad}}</td>
+				</tr>
+			{{/each}}
+
+
       </table>
     </article>
     <article class="col l5 m12">
@@ -158,58 +76,17 @@
         <tr>
           <th>Nombre</th>
           <th>Puntos</th>
-          <th>Rango</th>
+          <th>Batallas</th>
         </tr>
-        <tr>
-          <td>Fabian</td>
-          <td>520</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Matias</td>
-          <td>515</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Patricio</td>
-          <td>475</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Rafa</td>
-          <td>320</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Ezequiel</td>
-          <td>305</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Fabian</td>
-          <td>520</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Matias</td>
-          <td>515</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Patricio</td>
-          <td>475</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Rafa</td>
-          <td>320</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
-        <tr>
-          <td>Ezequiel</td>
-          <td>305</td>
-          <td><img src="img/medalla.png" alt="rango"></td>
-        </tr>
+
+			{{#each all}}
+			</tr>
+				<td>{{this.username}}</td>
+				<td>{{this.totalpuntos}}</td>
+				<td>{{this.cantidad}}</td>
+				</tr>
+			{{/each}}
+
       </table>
     </article>
   </section>

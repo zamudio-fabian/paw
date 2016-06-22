@@ -12,11 +12,11 @@ var NodeSession = require('node-session');
 var gravatar = require('gravatar');
 var validator = require('validator');
 
+
 /**********************************
 **	AUX
 ***********************************/
 session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
-
 
 /**********************************
 **	HOME
@@ -34,8 +34,8 @@ exports.home = function(req, res) {
 			if (err) {
 				require('../controllers/404').get(req, res);
 			}
-			client.query('SELECT * FROM users', function(err, result) {
-
+			client.query('SELECT username,SUM(puntos) as totalpuntos FROM users inner join batallas on users.username = batallas.ganador GROUP BY username',
+			function(err, result) {
 				if (err) {
 					require('../controllers/404').get(req, res);
 				}
@@ -265,19 +265,24 @@ exports.play = function(req, res) {
 		if (req.session.has('username')){
 			data['username'] = req.session.get('username');
 			data['foto'] = req.session.get('foto');
-		}
-		fs.readFile(path.resolve(__dirname, '../views/play.html'),'utf-8', function (error,source) {
-			if (error) {
-				require('../controllers/404').get(req, res);
-			}
-			res.writeHead(200, {
-				'Content-Type': 'text/html'
+			fs.readFile(path.resolve(__dirname, '../views/play.html'),'utf-8', function (error,source) {
+				if (error) {
+					require('../controllers/404').get(req, res);
+				}
+				res.writeHead(200, {
+					'Content-Type': 'text/html'
+				});
+				var template = handlebars.compile(source);
+				var html = template(data);
+				res.write(html);
+				res.end();
 			});
-			var template = handlebars.compile(source);
-			var html = template(data);
-			res.write(html);
+		}else{
+			res.writeHead(302, {
+				'Location': 'login'
+			});
 			res.end();
-		});
+		}
 	});
 }
 
@@ -291,17 +296,44 @@ exports.rank = function(req, res) {
 			data['username'] = req.session.get('username');
 			data['foto'] = req.session.get('foto');
 		}
-		fs.readFile(path.resolve(__dirname, '../views/rank.html'),'utf-8', function (error,source) {
-			if (error) {
+		pg.connect(conf.conectionString(), function(err, client, done) {
+
+			if (err) {
+
 				require('../controllers/404').get(req, res);
 			}
-			res.writeHead(200, {
-				'Content-Type': 'text/html'
+			client.query('SELECT username,SUM(puntos) as totalpuntos,COUNT(puntos) as cantidad FROM users inner join batallas on users.username = batallas.ganador '+
+			" WHERE start_date  >= CURRENT_DATE - interval '1 months' GROUP BY username",
+			function(err, result) {
+				if (err) {
+					require('../controllers/404').get(req, res);
+				}else{
+					data['month'] = result.rows;
+					client.query('SELECT username,SUM(puntos) as totalpuntos,COUNT(puntos) as cantidad FROM users inner join batallas on users.username = batallas.ganador '+
+					" GROUP BY username",
+					function(err, result) {
+						if (err) {
+							require('../controllers/404').get(req, res);
+						}else{
+							fs.readFile(path.resolve(__dirname, '../views/rank.html'),'utf-8', function (error,source) {
+								if (error) {
+									require('../controllers/404').get(req, res);
+								}else{
+									data['all']		= result.rows;
+									res.writeHead(200, {
+										'Content-Type': 'text/html'
+									});
+									var template = handlebars.compile(source);
+									var html = template(data);
+									res.write(html);
+									res.end();
+								}
+
+							});
+						}
+					});
+				}
 			});
-			var template = handlebars.compile(source);
-			var html = template(data);
-			res.write(html);
-			res.end();
 		});
 	});
 }
