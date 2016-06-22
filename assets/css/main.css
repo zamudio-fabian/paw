@@ -11,6 +11,14 @@ ul li {
   list-style-type: none;
 }
 
+.circle{
+	border-radius: 50%;
+	height: 30px;
+	width: 30px;
+	vertical-align: middle;
+    margin-right: 10px;
+}
+
 footer.page-footer {
   margin-top: 20px;
   padding-top: 20px;

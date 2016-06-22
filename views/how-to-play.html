@@ -20,7 +20,12 @@
         <li><a href="news">Noticias</a></li>
         <li><a href="support">Soporte</a></li>
 
-        <li><a href="login" class="btn btn-login">Ingresar</a></li>
+		{{#if username}}
+			<li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
+			<li><a href="logout">Salir</a></li>
+		{{else}}
+        	<li><a href="login" class="btn btn-login">Ingresar</a></li>
+		{{/if}}
       </ul>
       <ul class="side-nav" id="mobile-demo">
          <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
@@ -30,7 +35,12 @@
         <li><a href="news">Noticias</a></li>
         <li><a href="support">Soporte</a></li>
 
-        <li><a href="login" class="btn btn-login">Ingresar</a></li>
+		{{#if username}}
+			<li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
+			<li><a href="logout">Salir</a></li>
+		{{else}}
+        	<li><a href="login" class="btn btn-login">Ingresar</a></li>
+		{{/if}}
       </ul>
     </div>
   </nav>

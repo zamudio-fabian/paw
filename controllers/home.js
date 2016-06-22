@@ -3,66 +3,62 @@
 ***********************************/
 var fs = require('fs');
 var path = require("path");
+var url = require("url");
+var qs = require('querystring');
 var handlebars = require('handlebars');
 var pg = require('pg');
 var conf = require('../core/config.js');
+var NodeSession = require('node-session');
+var gravatar = require('gravatar');
+var validator = require('validator');
 
 /**********************************
 **	AUX
 ***********************************/
-
+session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
 
 
 /**********************************
 **	HOME
 ***********************************/
 exports.home = function(req, res) {
-	var data = {};
-	pg.connect(conf.conectionString(), function(err, client, done) {
 
-	    var handleError = function(err) {
-	      // no error occurred, continue with the request
-	      if(!err) return false;
+	session.startSession(req, res,function(){
+		var data = {};
+		if (req.session.has('username')){
+			data['username'] = req.session.get('username');
+			data['foto'] = req.session.get('foto');
+		}
+		pg.connect(conf.conectionString(), function(err, client, done) {
 
-	      // An error occurred, remove the client from the connection pool.
-	      // A truthy value passed to done will remove the connection from the pool
-	      // instead of simply returning it to be reused.
-	      // In this case, if we have successfully received a client (truthy)
-	      // then it will be removed from the pool.
-	      if(client){
-	        done(client);
-	      }
-	      res.writeHead(500, {'content-type': 'text/plain'});
-	      res.end('An error occurred');
-	      return true;
-	    };
+			if (err) {
+				require('../controllers/404').get(req, res);
+			}
+			client.query('SELECT * FROM users', function(err, result) {
 
-	    // handle an error from the connection
-	    if(handleError(err)) return;
+				if (err) {
+					require('../controllers/404').get(req, res);
+				}
 
-		client.query('SELECT * FROM users', function(err, result) {
+				fs.readFile(path.resolve(__dirname, '../views/index.html'),'utf-8','utf-8', function (error, source) {
+					if (error) {
+						require('../controllers/404').get(req, res);
+					}
+					res.writeHead(200, {
+						'Content-Type': 'text/html'
+					});
+					data['users'] = result.rows;
 
-		  // handle an error from the query
-		  if(handleError(err)) return;
+					var template = handlebars.compile(source);
+					var html = template(data);
+					res.write(html);
+					res.end();
+				});
 
-		  // return the client to the connection pool for other requests to reuse
-		  done();
-		  fs.readFile(path.resolve(__dirname, '../views/index.html'),'utf-8','utf-8', function (error, source) {
-		  		if (error) {
-		  			require('../controllers/404').get(req, res);
-		  		}
-		  		res.writeHead(200, {
-		  			'Content-Type': 'text/html'
-		  		});
-				data['users'] = result.rows;
-		  		var template = handlebars.compile(source);
-		  		var html = template(data);
-		  		res.write(html);
-		  		res.end();
-		  	});
-
+			});
 		});
-	  });
+	});
+
 
 
 }
@@ -71,17 +67,159 @@ exports.home = function(req, res) {
 **	LOGIN
 ***********************************/
 exports.login = function(req, res) {
-	var data = {};
-	fs.readFile(path.resolve(__dirname, '../views/login.html'),'utf-8', function (error,source) {
-		if (error) {
-			require('../controllers/404').get(req, res);
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			res.writeHead(302, {
+				'Location': 'home'
+			});
+			res.end();
+		}else{
+			var data = {};
+			fs.readFile(path.resolve(__dirname, '../views/login.html'),'utf-8', function (error,source) {
+				if (error) {
+					require('../controllers/404').get(req, res);
+				}
+				res.writeHead(200, {
+					'Content-Type': 'text/html'
+				});
+				var template = handlebars.compile(source);
+				var html = template(data);
+				res.write(html);
+				res.end();
+			});
 		}
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+	});
+}
+
+/**********************************
+**	DOLOGIN
+***********************************/
+exports.dologin = function(req, res){
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			res.writeHead(302, {
+				'Location': 'home'
+			});
+			res.end();
+		}else{
+			if (req.method == 'POST') {
+				var fullBody = '';
+				req.on('data', function(chunk) {
+					// append the current chunk of data to the fullBody variable
+					fullBody += chunk.toString();
+				});
+
+				req.on('end', function() {
+					// parse the received body data
+					var decodedBody = qs.parse(fullBody);
+					if(validator.isEmail(decodedBody['email'])){
+						pg.connect(conf.conectionString(), function(err, client, done) {
+							//Update last_login
+							//Si afecta a 1 row quiere decir que existe
+							client.query("SELECT * FROM users WHERE email = $1 and password = $2",
+							[decodedBody['email'],decodedBody['password']],
+							function(err, result) {
+								if(err){
+									require('../controllers/404').get(req, res);
+								}
+								if(result.rowCount==1){
+									session.startSession(req, res,function(){
+										req.session.put('username', result.rows[0]['username']);
+										req.session.put('email', result.rows[0]['email']);
+										req.session.put('foto',gravatar.url(req.session.get('email'), {s: '200'}));
+										res.writeHead(302, {
+											'Location': 'home'
+										});
+										res.end();
+									});
+								}else{
+									res.writeHead(302, {
+										'Location': 'login'
+									});
+									res.end();
+								}
+							});
+						});
+					}else{
+						res.writeHead(302, {
+							'Location': 'login'
+						});
+						res.end();
+					}
+				});
+			} else{
+				require('../controllers/404').get(req, res);
+			}
+		}
+	});
+}
+
+/**********************************
+**	DOREGISTRO
+***********************************/
+exports.doregistro = function(req,res){
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			res.writeHead(302, {
+				'Location': 'home'
+			});
+			res.end();
+		}else{
+
+			if (req.method == 'POST') {
+				var fullBody = '';
+				req.on('data', function(chunk) {
+					// append the current chunk of data to the fullBody variable
+					fullBody += chunk.toString();
+				});
+
+				req.on('end', function() {
+					// parse the received body data
+					var decodedBody = qs.parse(fullBody);
+					pg.connect(conf.conectionString(), function(err, client, done) {
+						if(validator.isEmail(decodedBody['email'])){
+							client.query("INSERT INTO users (email, password, username, last_login) VALUES ($1, $2, $3,CURRENT_TIMESTAMP)",
+							[decodedBody['email'],decodedBody['password'],decodedBody['username']],
+							function(err, result) {
+								if(err){
+									require('../controllers/404').get(req, res);
+								}
+								// empty 200 OK response for now
+								session.startSession(req, res,function(){
+									req.session.put('username', decodedBody['username']);
+									req.session.put('email', decodedBody['email']);
+									req.session.put('foto',gravatar.url(decodedBody['email'], {s: '200'}));
+									res.writeHead(302, {
+										'Location': 'home'
+									});
+									res.end();
+								});
+							});
+						}else{
+							res.writeHead(302, {
+								'Location': 'home'
+							});
+							res.end();
+						}
+					});
+				});
+
+			} else{
+				require('../controllers/404').get(req, res);
+			}
+		}
+	});
+}
+
+/**********************************
+**	LOGOUT
+***********************************/
+exports.logout = function(req,res){
+	session.startSession(req, res,function(){
+		req.session.flush();
+		res.writeHead(302, {
+			'Location': 'home'
 		});
-		var template = handlebars.compile(source);
-		var html = template(data);
-		res.write(html);
 		res.end();
 	});
 }
@@ -91,19 +229,24 @@ exports.login = function(req, res) {
 ***********************************/
 exports.news = function(req, res) {
 	var data = {};
-	fs.readFile(path.resolve(__dirname, '../views/news.html'),'utf-8', function (error,source) {
-		if (error) {
-			require('../controllers/404').get(req, res);
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			data['username'] = req.session.get('username');
+			data['foto'] = req.session.get('foto');
 		}
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+		fs.readFile(path.resolve(__dirname, '../views/news.html'),'utf-8', function (error,source) {
+			if (error) {
+				require('../controllers/404').get(req, res);
+			}
+			res.writeHead(200, {
+				'Content-Type': 'text/html'
+			});
+			var template = handlebars.compile(source);
+			var html = template(data);
+			res.write(html);
+			res.end();
 		});
-		var template = handlebars.compile(source);
-		var html = template(data);
-		res.write(html);
-		res.end();
 	});
-
 }
 
 /**********************************
@@ -111,17 +254,23 @@ exports.news = function(req, res) {
 ***********************************/
 exports.play = function(req, res) {
 	var data = {};
-	fs.readFile(path.resolve(__dirname, '../views/play.html'),'utf-8', function (error,source) {
-		if (error) {
-			require('../controllers/404').get(req, res);
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			data['username'] = req.session.get('username');
+			data['foto'] = req.session.get('foto');
 		}
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+		fs.readFile(path.resolve(__dirname, '../views/play.html'),'utf-8', function (error,source) {
+			if (error) {
+				require('../controllers/404').get(req, res);
+			}
+			res.writeHead(200, {
+				'Content-Type': 'text/html'
+			});
+			var template = handlebars.compile(source);
+			var html = template(data);
+			res.write(html);
+			res.end();
 		});
-		var template = handlebars.compile(source);
-		var html = template(data);
-		res.write(html);
-		res.end();
 	});
 }
 
@@ -130,17 +279,23 @@ exports.play = function(req, res) {
 ***********************************/
 exports.rank = function(req, res) {
 	var data = {};
-	fs.readFile(path.resolve(__dirname, '../views/rank.html'),'utf-8', function (error,source) {
-		if (error) {
-			require('../controllers/404').get(req, res);
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			data['username'] = req.session.get('username');
+			data['foto'] = req.session.get('foto');
 		}
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+		fs.readFile(path.resolve(__dirname, '../views/rank.html'),'utf-8', function (error,source) {
+			if (error) {
+				require('../controllers/404').get(req, res);
+			}
+			res.writeHead(200, {
+				'Content-Type': 'text/html'
+			});
+			var template = handlebars.compile(source);
+			var html = template(data);
+			res.write(html);
+			res.end();
 		});
-		var template = handlebars.compile(source);
-		var html = template(data);
-		res.write(html);
-		res.end();
 	});
 }
 
@@ -149,17 +304,23 @@ exports.rank = function(req, res) {
 ***********************************/
 exports.support = function(req, res) {
 	var data = {};
-	fs.readFile(path.resolve(__dirname, '../views/support.html'),'utf-8', function (error,source) {
-		if (error) {
-			require('../controllers/404').get(req, res);
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			data['username'] = req.session.get('username');
+			data['foto'] = req.session.get('foto');
 		}
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+		fs.readFile(path.resolve(__dirname, '../views/support.html'),'utf-8', function (error,source) {
+			if (error) {
+				require('../controllers/404').get(req, res);
+			}
+			res.writeHead(200, {
+				'Content-Type': 'text/html'
+			});
+			var template = handlebars.compile(source);
+			var html = template(data);
+			res.write(html);
+			res.end();
 		});
-		var template = handlebars.compile(source);
-		var html = template(data);
-		res.write(html);
-		res.end();
 	});
 }
 
@@ -168,16 +329,22 @@ exports.support = function(req, res) {
 ***********************************/
 exports.howtoplay = function(req, res) {
 	var data = {};
-	fs.readFile(path.resolve(__dirname, '../views/how-to-play.html'),'utf-8', function (error,source) {
-		if (error) {
-			require('../controllers/404').get(req, res);
+	session.startSession(req, res,function(){
+		if (req.session.has('username')){
+			data['username'] = req.session.get('username');
+			data['foto'] = req.session.get('foto');
 		}
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+		fs.readFile(path.resolve(__dirname, '../views/how-to-play.html'),'utf-8', function (error,source) {
+			if (error) {
+				require('../controllers/404').get(req, res);
+			}
+			res.writeHead(200, {
+				'Content-Type': 'text/html'
+			});
+			var template = handlebars.compile(source);
+			var html = template(data);
+			res.write(html);
+			res.end();
 		});
-		var template = handlebars.compile(source);
-		var html = template(data);
-		res.write(html);
-		res.end();
 	});
 }

@@ -7,5 +7,9 @@ rutas["/play"] = {controlador: 'home', metodo: 'play'};
 rutas["/rank"] = {controlador: 'home', metodo: 'rank'};
 rutas["/how-to-play"] = {controlador: 'home', metodo: 'howtoplay'};
 rutas["/support"] = {controlador: 'home', metodo: 'support'};
+rutas["/logout"] = {controlador: 'home', metodo: 'logout'};
+rutas["/dologin"] = {controlador: 'home', metodo: 'dologin'};
+rutas["/registro"] = {controlador: 'home', metodo: 'registro'};
+rutas["/doregistro"] = {controlador: 'home', metodo: 'doregistro'};
 
 exports.rutas = rutas;

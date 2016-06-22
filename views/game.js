@@ -1,6 +1,0 @@
-
-
-exports.render = function() {
-
-
-}
