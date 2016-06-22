@@ -116,28 +116,35 @@ exports.dologin = function(req, res){
 						pg.connect(conf.conectionString(), function(err, client, done) {
 							//Update last_login
 							//Si afecta a 1 row quiere decir que existe
-							client.query("SELECT * FROM users WHERE email = $1 and password = $2",
+							client.query("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = $1 and password = $2",
 							[decodedBody['email'],decodedBody['password']],
 							function(err, result) {
 								if(err){
 									require('../controllers/404').get(req, res);
 								}
-								if(result.rowCount==1){
-									session.startSession(req, res,function(){
-										req.session.put('username', result.rows[0]['username']);
-										req.session.put('email', result.rows[0]['email']);
-										req.session.put('foto',gravatar.url(req.session.get('email'), {s: '200'}));
+								client.query("SELECT * FROM users WHERE email = $1 and password = $2",
+								[decodedBody['email'],decodedBody['password']],
+								function(err, result) {
+									if(err){
+										require('../controllers/404').get(req, res);
+									}
+									if(result.rowCount==1){
+										session.startSession(req, res,function(){
+											req.session.put('username', result.rows[0]['username']);
+											req.session.put('email', result.rows[0]['email']);
+											req.session.put('foto',gravatar.url(result.rows[0]['email'], {s: '200'}));
+											res.writeHead(302, {
+												'Location': 'home'
+											});
+											res.end();
+										});
+									}else{
 										res.writeHead(302, {
-											'Location': 'home'
+											'Location': 'login'
 										});
 										res.end();
-									});
-								}else{
-									res.writeHead(302, {
-										'Location': 'login'
-									});
-									res.end();
-								}
+									}
+								});
 							});
 						});
 					}else{
