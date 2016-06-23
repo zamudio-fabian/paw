@@ -448,16 +448,18 @@ function JuegoClient(svg){
 			for (var i = 1; i <= dadosDefensor.length; i++) {
 				$("#wrapperDD > .dado"+i).attr('src',that.dadosImg[dado.tirar()]);
 			}
-			if(cantidad>30){
+			if(cantidad>20){
 				clearInterval(myVar);
 				for (var i = 1; i <= dadosAtacante.length; i++) {
-					$("#wrapperDA > .dado"+i).attr('src',that.dadosImg[dadosAtacante[i]]);
+					$("#wrapperDA > .dado"+i).attr('src',that.dadosImg[dadosAtacante[i-1]]);
 				}
 				for (var i = 1; i <= dadosDefensor.length; i++) {
-					$("#wrapperDD > .dado"+i).attr('src',that.dadosImg[dadosDefensor[i]]);
+					$("#wrapperDD > .dado"+i).attr('src',that.dadosImg[dadosDefensor[i-1]]);
 				}
 				setTimeout(function(){
 					var dado = new Dado();
+					console.log(dadosAtacante);
+					console.log(dadosDefensor);
 					for (var i = 1; i <= dadosAtacante.length; i++) {
 						$("#wrapperDA > .dado"+i).removeClass('active');
 					}
