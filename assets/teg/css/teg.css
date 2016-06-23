@@ -234,3 +234,57 @@ g{
 border-bottom-left-radius: 8px;
 border-bottom-right-radius: 8px;
 }
+
+#wrapperDA{
+	display: none;
+	position: absolute;
+    top: 40%;
+	width: 20%;
+	left:35%;
+	height: 15%;
+	background: #d4c28e;
+	border-radius: 3%;
+}
+
+.dado1{
+	left:4%;
+}
+
+.dado2{
+	left:36%;
+}
+
+.dado3{
+	left:68%;
+}
+
+#wrapperDD{
+	display: none;
+	position: absolute;
+    top: 40%;
+	width: 20%;
+	left:66%;
+	height: 15%;
+	background: #d4c28e;
+	border-radius: 3%;
+}
+
+#wrapperDD.active{
+	display:block !important;
+}
+#wrapperDA.active{
+	display:block !important;
+}
+
+
+.dado{
+	display: none;
+	width: 27.5%;
+    top: 15%;
+    height: 70%;
+    position: absolute;
+}
+
+.dado.active{
+	display: block !important;
+}

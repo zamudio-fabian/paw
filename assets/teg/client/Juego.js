@@ -7,8 +7,13 @@ function JuegoClient(svg){
 	this.cantidad = 0;
 	this.finish = false;
 	this.conquistado = false;
+	this.dadosImg = [];
 	this.socket = io.connect('http://localhost:8888');
 	var that = this;
+
+		for (var i = 1; i <= 6; i++) {
+			this.dadosImg[i] = 'teg/images/dado'+i+'.png';
+		}
 
 		//Creamos paises
 		this.paises = {
@@ -187,6 +192,9 @@ function JuegoClient(svg){
 	});
 
 	this.socket.on('responseAtacar',function(response){
+		var customCallback = function(){
+			that.refreshAfterAtaque();
+		};
 		that.paisSeleccionado1.removeEjercito(response.ejercitos.atacantesEliminados);
 		that.paisSeleccionado2.removeEjercito(response.ejercitos.defensoresEliminados);
 		if(response.conquistado){
@@ -196,23 +204,29 @@ function JuegoClient(svg){
 			that.paisSeleccionado2.jugador.paises.splice(indexPaisJ2,1);
 			that.paisSeleccionado1.jugador.paises.push(that.paisSeleccionado2);
 			that.paisSeleccionado2.jugador = that.paisSeleccionado1.jugador;
-			//Solo si es el jugador activo
-			if(that.jugadorId == that.jugadorActual.id){
-				var auxOptions = "";
-				for (var i = 1; i <= auxEjercitos; i++) {
-					auxOptions+='<option value="'+i+'">'+i+'</option>';
+			customCallback = function(){
+
+				//Solo si es el jugador activo
+				if(that.jugadorId == that.jugadorActual.id){
+					var auxOptions = "";
+					for (var i = 1; i <= auxEjercitos; i++) {
+						auxOptions+='<option value="'+i+'">'+i+'</option>';
+					}
+					$('#EjercitoAtackAdd').html(auxOptions);
+					$('#modalWrapper').css('display','block');
+					$('#modal').css('display','block');
+				}else{
+					$('#modalMessage h6').html(that.jugadorActual.nombre+' ha conquistado '+auxPais);
+					$('#modalMessage p').html('');
+					$('#modalWrapper').css('display','block');
+					$('#modalMessage').css('display','block');
 				}
-				$('#EjercitoAtackAdd').html(auxOptions);
-				$('#modalWrapper').css('display','block');
-				$('#modal').css('display','block');
-			}else{
-				$('#modalMessage h6').html(that.jugadorActual.nombre+' ha conquistado '+auxPais);
-				$('#modalMessage p').html('');
-				$('#modalWrapper').css('display','block');
-				$('#modalMessage').css('display','block');
+				that.refreshAfterAtaque();
 			}
+
 		}
-		that.refreshAfterAtaque(response.ejercitos.dadosAtacante,response.ejercitos.dadosDefensores);
+		showDados(response.ejercitos.dadosAtacante,response.ejercitos.dadosDefensores,customCallback);
+
 
 
 	});
@@ -357,18 +371,7 @@ function JuegoClient(svg){
 		alert('ganaste');
 	}
 
-	this.refreshAfterAtaque = function(dadosAtacante,dadosDefensor){
-		var txt = $('#consola');
-		var txtAtacante = '';
-		var txtDefensor = '';
-		for (var i = 0; i < dadosAtacante.length; i++) {
-			txtAtacante += ' '+dadosAtacante[i];
-		}
-		for (var i = 0; i < dadosDefensor.length; i++) {
-			txtDefensor += ' '+dadosDefensor[i];
-		}
-		txt.text(txt.val()+"/nAtacante = "+txtAtacante);
-		txt.text(txt.val()+"/nDefensor = "+txtDefensor);
+	this.refreshAfterAtaque = function(){
 		var j1 = that.getJ(1);
 		var j2 = that.getJ(2);
 		$("#ejercitosJ1").text('E '+j1.ejercitosDisponibles);
@@ -422,6 +425,56 @@ function JuegoClient(svg){
 		$("#estadoJ2").text(j2.estado);
 		showMessage();
 	}
+
+	function showDados(dadosAtacante,dadosDefensor,callback){
+		var cantidad = 0;
+		console.log(dadosAtacante);
+		console.log(dadosDefensor);
+		var auxDadosAtacante = [];
+		var auxDadosDefensor = [];
+		for (var i = 1; i <= dadosAtacante.length; i++) {
+			$("#wrapperDA > .dado"+i).addClass('active');
+		}
+		for (var i = 1; i <= dadosDefensor.length; i++) {
+			$("#wrapperDD > .dado"+i).addClass('active');
+		}
+		$('#wrapperDA').addClass('active');
+		$('#wrapperDD').addClass('active');
+		var myVar = setInterval(function(){
+			var dado = new Dado();
+			for (var i = 1; i <= dadosAtacante.length; i++) {
+				$("#wrapperDA > .dado"+i).attr('src',that.dadosImg[dado.tirar()]);
+			}
+			for (var i = 1; i <= dadosDefensor.length; i++) {
+				$("#wrapperDD > .dado"+i).attr('src',that.dadosImg[dado.tirar()]);
+			}
+			if(cantidad>30){
+				clearInterval(myVar);
+				for (var i = 1; i <= dadosAtacante.length; i++) {
+					$("#wrapperDA > .dado"+i).attr('src',that.dadosImg[dadosAtacante[i]]);
+				}
+				for (var i = 1; i <= dadosDefensor.length; i++) {
+					$("#wrapperDD > .dado"+i).attr('src',that.dadosImg[dadosDefensor[i]]);
+				}
+				setTimeout(function(){
+					var dado = new Dado();
+					for (var i = 1; i <= dadosAtacante.length; i++) {
+						$("#wrapperDA > .dado"+i).removeClass('active');
+					}
+					for (var i = 1; i <= dadosDefensor.length; i++) {
+						$("#wrapperDD > .dado"+i).removeClass('active');
+					}
+					$('#wrapperDA').removeClass('active');
+					$('#wrapperDD').removeClass('active');
+					callback();
+				}, 2000);
+			}else{
+				cantidad++;
+			}
+		}, 100);
+	}
+
+
 
 	function showMessage(){
 		var txt = $('#consola');

@@ -19,13 +19,13 @@ $('#svggame').before('<div id="wrapperj2"><div class="nombreteg"><span id="nombr
 $('#svggame').before('<div id="wrapperp1" class="z-depth-3"><span></span><i class="fa fa-times pointer" aria-hidden="true"></i></div>');
 $('#svggame').before('<div id="wrapperp2" class="z-depth-3"><span></span><i class="fa fa-times pointer" aria-hidden="true"></i></div>');
 $('#svggame').before('<div id="btnObjetivo"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Objetivo</div>');
-
-
 $('#svggame').before('<button id="btnAtacar" class="z-depth-2"><i class="fa fa-bomb" aria-hidden="true"></i></button>');
 $('#svggame').before('<button id="btnRestar" class="z-depth-2"><i class="fa fa-minus" aria-hidden="true"></i></button>');
 $('#svggame').before('<button id="btnAumentar" class="z-depth-2"><i class="fa fa-plus" aria-hidden="true"></i></button>');
 $('#svggame').before('<button id="btnLeft" class="z-depth-2"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></button>');
 
+$('#svggame').before('<div id="wrapperDA"><img src="" class="dado dado1"><img src="" class="dado dado2"><img src="" class="dado dado3"></div>');
+$('#svggame').before('<div id="wrapperDD" ><img src="" class="dado dado1"><img src="" class="dado dado2"><img src="" class="dado dado3"></div>');
 //Cargamos svg mínimo
 var s = Snap("#svggame");
 s.attr({ viewBox: "0 0 1100 600" });
