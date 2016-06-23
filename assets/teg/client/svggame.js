@@ -13,12 +13,15 @@ $("#myForm").remove();
 $('#svgwrapper').append('<svg class="z-depth-3 margin30-tb col m12 s12" id="svggame"></svg>');
 $('#modalLoading').css('display','block');
 $('#svggame').before('<textarea id="consola" rows="8" cols="40"></textarea>');
-$('#svggame').before('<button id="btnNext" rows="8" cols="40">Siguiente</button>');
+$('#svggame').before('<button id="btnNext" >Siguiente</button>');
 $('#svggame').before('<div id="wrapperj1" class="activePlayer"><div class="nombreteg"><span id="nombreJ1"></span><br><small id="estadoJ1"></small></div><div class="ejercitosteg" id="ejercitosJ1"></div><div id="paisesJ1" class="paisesteg"></div></div>');
 $('#svggame').before('<div id="wrapperj2"><div class="nombreteg"><span id="nombreJ2"></span></br><small id="estadoJ2"></small></div><div class="ejercitosteg" id="ejercitosJ2"></div><div id="paisesJ2" class="paisesteg"></div></div>');
 $('#svggame').before('<div id="wrapperp1" class="z-depth-3"><span></span><i class="fa fa-times pointer" aria-hidden="true"></i></div>');
 $('#svggame').before('<div id="wrapperp2" class="z-depth-3"><span></span><i class="fa fa-times pointer" aria-hidden="true"></i></div>');
-$('#svggame').before('<button id="btnAtacar" ><i class="fa fa-bomb" aria-hidden="true"></i></button>');
+$('#svggame').before('<div id="btnObjetivo"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Objetivo</div>');
+
+
+$('#svggame').before('<button id="btnAtacar" class="z-depth-2"><i class="fa fa-bomb" aria-hidden="true"></i></button>');
 $('#svggame').before('<button id="btnRestar" class="z-depth-2"><i class="fa fa-minus" aria-hidden="true"></i></button>');
 $('#svggame').before('<button id="btnAumentar" class="z-depth-2"><i class="fa fa-plus" aria-hidden="true"></i></button>');
 $('#svggame').before('<button id="btnLeft" class="z-depth-2"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></button>');
@@ -31,6 +34,13 @@ s.attr({ viewBox: "0 0 1100 600" });
 tegGame = new JuegoClient(s);
 $('#btnNext').click(tegGame.siguiente);
 $('#btnAtacar').click(tegGame.atacar);
+$('#btnObjetivo').click(function(){
+		$('#modalMessage h6').html('OBJETIVO SECRETO :<br>');
+		$('#modalMessage p').html(tegGame.objetivo.descripcion);
+		$('#modalWrapper').css('display','block');
+		$('#modalMessage').css('display','block');
+	}
+);
 $('#btnAumentar').click(function(){
 	if(tegGame.paisSeleccionado1){
 		switch (tegGame.jugadorActual.estado) {
@@ -91,6 +101,9 @@ function addEjercitoAfterAtack(){
 }
 
 function closeMessage(){
+	if(tegGame.finish==true){
+		window.location.href = "/play";
+	}
 	$('#modalWrapper').css('display','none');
 	$('#modalMessage').css('display','none');
 }

@@ -16,7 +16,8 @@ var validator = require('validator');
 /**********************************
 **	AUX
 ***********************************/
-session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
+session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',
+							'lifetime':3600000});
 
 /**********************************
 **	HOME
@@ -34,13 +35,13 @@ exports.home = function(req, res) {
 			if (err) {
 				require('../controllers/404').get(req, res);
 			}
-			client.query('SELECT username,SUM(puntos) as totalpuntos FROM users inner join batallas on users.username = batallas.ganador GROUP BY username',
+			client.query('SELECT username,SUM(puntos) as totalpuntos FROM users inner join batallas on users.username = batallas.ganador GROUP BY username ORDER BY totalpuntos  DESC',
 			function(err, result) {
 				if (err) {
 					require('../controllers/404').get(req, res);
 				}
 
-				fs.readFile(path.resolve(__dirname, '../views/index.html'),'utf-8','utf-8', function (error, source) {
+				fs.readFile(path.resolve(__dirname, '../views/index.html'),'utf-8', function (error, source) {
 					if (error) {
 						require('../controllers/404').get(req, res);
 					}
@@ -75,6 +76,7 @@ exports.login = function(req, res) {
 			res.end();
 		}else{
 			var data = {};
+			req.session.keep('redirect');
 			fs.readFile(path.resolve(__dirname, '../views/login.html'),'utf-8', function (error,source) {
 				if (error) {
 					require('../controllers/404').get(req, res);
@@ -133,9 +135,16 @@ exports.dologin = function(req, res){
 											req.session.put('username', result.rows[0]['username']);
 											req.session.put('email', result.rows[0]['email']);
 											req.session.put('foto',gravatar.url(result.rows[0]['email'], {s: '200'}));
-											res.writeHead(302, {
-												'Location': 'home'
-											});
+											if (req.session.has('redirect'))
+											{
+												res.writeHead(302, {
+													'Location': req.session.get('redirect')
+												});
+											}else{
+												res.writeHead(302, {
+													'Location': 'home'
+												});
+											}
 											res.end();
 										});
 									}else{
@@ -278,6 +287,7 @@ exports.play = function(req, res) {
 				res.end();
 			});
 		}else{
+			req.session.flash('redirect', 'play');
 			res.writeHead(302, {
 				'Location': 'login'
 			});
@@ -303,23 +313,24 @@ exports.rank = function(req, res) {
 				require('../controllers/404').get(req, res);
 			}
 			client.query('SELECT username,SUM(puntos) as totalpuntos,COUNT(puntos) as cantidad FROM users inner join batallas on users.username = batallas.ganador '+
-			" WHERE start_date  >= CURRENT_DATE - interval '1 months' GROUP BY username",
-			function(err, result) {
-				if (err) {
+			" WHERE start_date  >= CURRENT_DATE - interval '1 months' GROUP BY username ORDER BY totalpuntos DESC",
+			function(errMonth, resultMonth) {
+				if (errMonth) {
 					require('../controllers/404').get(req, res);
 				}else{
-					data['month'] = result.rows;
+					data['month'] = resultMonth.rows;
 					client.query('SELECT username,SUM(puntos) as totalpuntos,COUNT(puntos) as cantidad FROM users inner join batallas on users.username = batallas.ganador '+
-					" GROUP BY username",
+					" GROUP BY username ORDER BY totalpuntos DESC",
 					function(err, result) {
 						if (err) {
 							require('../controllers/404').get(req, res);
 						}else{
+							data['all']		= result.rows;
 							fs.readFile(path.resolve(__dirname, '../views/rank.html'),'utf-8', function (error,source) {
 								if (error) {
 									require('../controllers/404').get(req, res);
 								}else{
-									data['all']		= result.rows;
+
 									res.writeHead(200, {
 										'Content-Type': 'text/html'
 									});

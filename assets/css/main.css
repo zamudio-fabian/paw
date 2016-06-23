@@ -1265,6 +1265,8 @@ nav .input-field label.active {
   padding: 0 30px;
 }
 
+
+
 .side-nav a:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -1350,10 +1352,17 @@ nav .input-field label.active {
 }
 
 .btn-redondeado{
-  border-radius: 50px;
-  background-color: #4FC3F7;
-  color:white;
-  padding: 7px 20px;
+	border-radius: 50px;
+   background-color: #4FC3F7;
+   color: white !important;
+   text-align: center;
+   padding: 7px 20px !important;
+}
+
+.btn-redondeado.small{
+	max-width: 80px;
+	line-height: 20px !important;
+	max-height: 30px;
 }
 
 
@@ -1425,7 +1434,7 @@ nav .input-field label.active {
   z-index: 9003;
     opacity: 1;
     transform: scaleX(1);
-    top: 10%;
+    top: 25%;
 
 }
 
@@ -1446,5 +1455,5 @@ nav .input-field label.active {
 	display: none;
 	padding: 20%;
     color: gray;
-    font-size: 1vw;
+    font-size: 2vw;
 }

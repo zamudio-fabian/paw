@@ -28,7 +28,7 @@
 		{{/if}}
       </ul>
       <ul class="side-nav" id="mobile-demo">
-         <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
+         <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn small">Jugar</a></li>
         <li><a href="home">Home</a></li>
         <li><a href="how-to-play">Como jugar</a></li>
         <li><a href="rank">Ranking</a></li>
@@ -78,15 +78,13 @@
           <th>Puntos</th>
           <th>Batallas</th>
         </tr>
-
-			{{#each all}}
+			{{#each month}}
 			</tr>
 				<td>{{this.username}}</td>
 				<td>{{this.totalpuntos}}</td>
 				<td>{{this.cantidad}}</td>
-				</tr>
+			</tr>
 			{{/each}}
-
       </table>
     </article>
   </section>

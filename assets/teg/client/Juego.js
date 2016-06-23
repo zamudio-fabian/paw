@@ -5,6 +5,7 @@ function JuegoClient(svg){
 	this.paisSeleccionado1 = '';
 	this.paisSeleccionado2 = '';
 	this.cantidad = 0;
+	this.finish = false;
 	this.conquistado = false;
 	this.socket = io.connect('http://localhost:8888');
 	var that = this;
@@ -119,7 +120,8 @@ function JuegoClient(svg){
 
 	this.socket.on('objetivo',function(objetivo){
 		that.objetivo = objetivo;
-		$('#modalMessage h6').html('OBJETIVO SECRETO :<br>'+that.objetivo.descripcion);
+		$('#modalMessage h6').html('OBJETIVO SECRETO :<br>');
+		$('#modalMessage p').html(that.objetivo.descripcion);
 		$('#modalWrapper').css('display','block');
 		$('#modalMessage').css('display','block');
 	});
@@ -205,6 +207,7 @@ function JuegoClient(svg){
 				$('#modal').css('display','block');
 			}else{
 				$('#modalMessage h6').html(that.jugadorActual.nombre+' ha conquistado '+auxPais);
+				$('#modalMessage p').html('');
 				$('#modalWrapper').css('display','block');
 				$('#modalMessage').css('display','block');
 			}
@@ -242,10 +245,13 @@ function JuegoClient(svg){
 				jugador = that.jugadores[i];
 			}
 		}
+		that.finish = true;
 		$('#modalMessage h6').html(jugador.nombre+' GANO!!!');
+		$('#modalMessage p').html('Presione "aceptar" para continuar');
 		$('#modalWrapper').css('display','block');
 		$('#modalMessage').css('display','block');
-		this.socket.disconnect();
+
+		this.disconnect();
 	});
 
 
