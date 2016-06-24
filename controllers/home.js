@@ -350,31 +350,6 @@ exports.rank = function(req, res) {
 }
 
 /**********************************
-**	SUPPORT
-***********************************/
-exports.support = function(req, res) {
-	var data = {};
-	session.startSession(req, res,function(){
-		if (req.session.has('username')){
-			data['username'] = req.session.get('username');
-			data['foto'] = req.session.get('foto');
-		}
-		fs.readFile(path.resolve(__dirname, '../views/support.html'),'utf-8', function (error,source) {
-			if (error) {
-				require('../controllers/404').get(req, res);
-			}
-			res.writeHead(200, {
-				'Content-Type': 'text/html'
-			});
-			var template = handlebars.compile(source);
-			var html = template(data);
-			res.write(html);
-			res.end();
-		});
-	});
-}
-
-/**********************************
 **	HOW TO PLAY
 ***********************************/
 exports.howtoplay = function(req, res) {

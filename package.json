@@ -1,0 +1,28 @@
+{
+  "name": "paw",
+  "version": "1.0.0",
+  "description": "Trabajo Práctico PAW",
+  "main": "index.js",
+  "dependencies": {
+    "gravatar": "^1.5.2",
+    "handlebars": "^4.0.5",
+    "node-session": "^1.2.1",
+    "validator": "^5.4.0",
+    "pg": "^5.1.0",
+    "googleapis": "^9.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zamudio-fabian/paw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zamudio-fabian/paw/issues"
+  },
+  "homepage": "https://github.com/zamudio-fabian/paw#readme"
+}
