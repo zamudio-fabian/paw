@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TEG Ultima Batalla</title>
+  <link rel="stylesheet" href="css/font-awesome-4.6.1/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/default.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<nav>
+	  <div class="nav-wrapper">
+		<a href="#!" class="brand-logo"></a>
+		<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="fa fa-bars" aria-hidden="true"></i></a>
+		<ul class="right hide-on-med-and-down">
+		   <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn">Jugar</a></li>
+		  <li><a href="home">Home</a></li>
+		  <li><a href="how-to-play">Como jugar</a></li>
+		  <li><a href="rank">Ranking</a></li>
+		  <li><a href="news">Noticias</a></li>
+
+		  {{#if username}}
+			  <li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
+			  <li><a href="logout">Salir</a></li>
+		  {{else}}
+			  <li><a href="login" class="btn btn-login">Ingresar</a></li>
+		  {{/if}}
+		</ul>
+		<ul class="side-nav" id="mobile-demo">
+		   <li><a href="play" class="btn btn-redondeado waves-effect waves-light btn small">Jugar</a></li>
+		  <li><a href="home">Home</a></li>
+		  <li><a href="how-to-play">Como jugar</a></li>
+		  <li><a href="rank">Ranking</a></li>
+		  <li><a href="news">Noticias</a></li>
+		  {{#if username}}
+			  <li><img src="{{foto}}" alt="" class="circle">{{username}}</li>
+			  <li><a href="logout">Salir</a></li>
+		  {{else}}
+			  <li><a href="login" class="btn btn-login">Ingresar</a></li>
+		  {{/if}}
+		</ul>
+	  </div>
+	</nav>
+  <section class="row container margin30-tb">
+
+  </section>
+  <footer class="page-footer right-align fixed">
+    <div class="container">
+    Fabian Zamudio
+    </div>
+  </footer>
+
+
+  <script src="js/jquery-2.2.3.min.js" charset="utf-8"></script>
+  <script src="js/elementos.js" charset="utf-8"></script>
+  <script src="js/main.js" charset="utf-8"></script>
+</body>
+</html>

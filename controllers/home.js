@@ -126,8 +126,8 @@ exports.dologin = function(req, res){
 								}
 								client.query("SELECT * FROM users WHERE email = $1 and password = $2",
 								[decodedBody['email'],decodedBody['password']],
-								function(err, result) {
-									if(err){
+								function(error, result) {
+									if(error){
 										require('../controllers/404').get(req, res);
 									}
 									if(result.rowCount==1){

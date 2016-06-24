@@ -10,5 +10,6 @@ rutas["/logout"] = {controlador: 'home', metodo: 'logout'};
 rutas["/dologin"] = {controlador: 'home', metodo: 'dologin'};
 rutas["/registro"] = {controlador: 'home', metodo: 'registro'};
 rutas["/doregistro"] = {controlador: 'home', metodo: 'doregistro'};
+rutas["/404"]	= {controlador: '404', metodo: 'get'};
 
 exports.rutas = rutas;
